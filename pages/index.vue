@@ -44,7 +44,6 @@
 definePageMeta({
   middleware: 'auth',
   layout: 'default',
-  name: 'Home',
 });
 
 useHead({
