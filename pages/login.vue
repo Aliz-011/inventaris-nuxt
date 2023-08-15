@@ -8,7 +8,7 @@
         Login to your account to continue.
       </h3>
       <hr class="mb-8" />
-      <form>
+      <form @submit.prevent="handleLogin">
         <div class="flex flex-col gap-y-4">
           <UFormGroup
             name="email"
@@ -40,7 +40,7 @@
 
           <UButton
             block
-            @click="handleLogin"
+            type="submit"
             label="Login"
             class="mt-2"
             :loading="loading"

@@ -8,7 +8,6 @@ export default defineNuxtConfig({
   },
   ui: {
     global: true,
-    safelistColors: ['violet'],
     icons: 'all',
   },
   // use "preference: 'dark'" in colorMode if want to set dark mode by default
