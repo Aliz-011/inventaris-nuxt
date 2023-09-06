@@ -10,7 +10,7 @@
             </h5>
             <div
               class="flex flex-col"
-              v-for="(item, index) in props.data.item_list"
+              v-for="(item, index) in data.item_list"
               :key="index"
             >
               <NuxtLink
@@ -36,7 +36,7 @@
             <h6
               class="text-sm text-violet-500 dark:text-violet-400 font-medium mb-2"
             >
-              Invoice Date
+              Tanggal Transaksi
             </h6>
             <span class="font-semibold">{{ timestamp }}</span>
           </div>
@@ -44,9 +44,9 @@
             <h6
               class="text-sm text-violet-500 dark:text-violet-400 font-medium mb-2"
             >
-              Due date:
+              Tipe pembayaran:
             </h6>
-            <span class="font-semibold">28 September, 2023</span>
+            <span class="font-semibold">{{ data.payment_type }}</span>
           </div>
         </div>
 
@@ -57,16 +57,14 @@
             >
               Bill To
             </h5>
-            <span class="font-semibold capitalize">{{
-              props.data.customer
-            }}</span>
+            <span class="font-semibold capitalize">{{ data.customer }}</span>
           </div>
 
           <div class="flex flex-col items-start text-sm">
-            <span>+62{{ props.data.customer_phone_number }}</span>
-            <span>BTN puskopad atas, Abepura</span>
+            <span>No. HP: +62{{ data.customer_phone_number }}</span>
+            <!-- <span>BTN puskopad atas, Abepura</span>
             <span>Jayapura</span>
-            <span>99351</span>
+            <span>99351</span> -->
           </div>
         </div>
 
@@ -92,7 +90,7 @@
           </tr>
           <tr
             class="flex gap-4"
-            v-for="(item, index) in props.data.item_list"
+            v-for="(item, index) in data.item_list"
             :key="index"
           >
             <td class="font-medium basis-1/2 capitalize">
@@ -127,14 +125,15 @@
 
 <script setup>
 const props = defineProps(['data']);
-const date = new Date(props.data.created_at);
+const { data } = toRefs(props);
+const date = new Date(data.value.created_at);
 const timestamp = date.toLocaleString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 
-const item_list = props.data.item_list;
+const item_list = data.value.item_list;
 let totalPrice = ref(0);
 for (const item of item_list) {
   totalPrice.value += item.quantity * item.price;

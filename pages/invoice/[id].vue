@@ -9,12 +9,32 @@
     <InvoiceDetails :data="selling">
       <UButton
         label="Bayar"
-        @click="paymentSnap"
         class="mt-4"
         block
+        @click="isOpen = true"
         v-if="selling.payment_type !== 'Cash'"
       />
+
+      <UButton
+        label="Cetak"
+        variant="outline"
+        block
+        class="mt-2"
+        @click="
+          ($event) =>
+            $router.push({ name: 'Print', params: { id: selling.id } })
+        "
+      />
     </InvoiceDetails>
+
+    <div>
+      <UModal v-model="isOpen">
+        <!-- Content -->
+        <UCard>
+          <img src="/qr.jpeg" alt="qr code" />
+        </UCard>
+      </UModal>
+    </div>
   </section>
 </template>
 
@@ -43,13 +63,14 @@ definePageMeta({
 // get id from params and fetch specific invoice
 const { id } = useRoute().params;
 const toast = useToast();
+const isOpen = ref(false);
 // fetch data from server/api
 const { data: selling } = await useFetch(`/api/invoices/${id}`);
 
 // sum the total price in item_list(JSON type) column
-let totalPrice = 0;
+const totalPrice = ref(0);
 for (const item of selling.value.item_list) {
-  totalPrice += item.quantity * item.price;
+  totalPrice.value += item.quantity * item.price;
 }
 
 // send the invoice data to generate token for midtrans-client SNAP
@@ -64,7 +85,7 @@ const sendDataToGetToken = async () => {
     body: {
       transaction_details: {
         order_id: `maspur-${+Math.round(new Date().getTime() / 1000)}`,
-        gross_amount: totalPrice,
+        gross_amount: totalPrice.value,
       },
       item_details: selling.value.item_list.map((item) => {
         return {

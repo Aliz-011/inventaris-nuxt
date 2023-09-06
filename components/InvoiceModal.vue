@@ -19,7 +19,7 @@
           <h5 class="text-sm text-violet-500 font-semibold">Bill To</h5>
           <UFormGroup
             name="customerName"
-            label="Customer's Name"
+            label="Nama kustomer"
             class="space-y-2"
           >
             <UInput
@@ -30,7 +30,7 @@
 
           <UFormGroup
             name="customerPhoneNumber"
-            label="Phone Number"
+            label="Nomor HP"
             class="space-y-2"
           >
             <UInput v-model="invoiceItems.customerPhone">
@@ -49,7 +49,7 @@
           <h5 class="text-sm text-violet-500 font-semibold">Payment info</h5>
           <UFormGroup
             name="invoiceDate"
-            label="Invoice Date"
+            label="Tanggal nota"
             class="space-y-2 w-full"
           >
             <UPopover :popper="{ placement: 'bottom-start' }">
@@ -66,7 +66,7 @@
 
           <UFormGroup
             name="paymentTypes"
-            label="Payment Types"
+            label="Tipe pembayaran"
             class="space-y-2 mb-2 w-full"
           >
             <USelectMenu
@@ -196,15 +196,7 @@ const payments = [
   },
   {
     id: 2,
-    name: 'Credit Card',
-  },
-  {
-    id: 3,
-    name: 'Paypal',
-  },
-  {
-    id: 4,
-    name: 'Debit Card',
+    name: 'QR',
   },
 ];
 const selectedPayment = ref(payments[0]);
@@ -244,7 +236,8 @@ async function handleSubmit() {
     toast.add({
       id: 'berhasil',
       title: 'Transaksi berhasil',
-      description: 'Data transaksi ditampilkan di halaman utama',
+      description:
+        'Data transaksi ditampilkan di halaman utama, lakukan refresh halaman terlebih dahulu',
       icon: 'i-heroicons-check-circle',
       timeout: 5000,
       color: 'green',

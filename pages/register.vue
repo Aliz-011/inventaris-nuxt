@@ -61,9 +61,6 @@
           <div
             class="w-full flex flex-col items-center justify-center gap-y-2 mt-2"
           >
-            <NuxtLink to="/" class="underline text-sm font-light">
-              Forgot your password?
-            </NuxtLink>
             <NuxtLink to="/login" class="underline text-sm font-light">
               Already have an account? Sign in.
             </NuxtLink>
@@ -119,11 +116,9 @@ const handleRegister = async () => {
     });
   } catch (error) {
     toast.add({
-      id: 'failed',
-      title: 'Failed!',
-      description: error.message,
-      icon: 'i-heroicons-check-circle',
-      timeout: 5000,
+      id: 'gagal',
+      title: error.message,
+      icon: 'i-clarity-times-circle-line',
       color: 'red',
     });
   } finally {

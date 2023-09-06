@@ -13,7 +13,6 @@
     <div
       class="w-32 inline-flex justify-center items-center gap-x-2 bg-green-400 py-1.5 rounded-md"
     >
-      <UIcon :name="props.type === 'Paypal' ? 'i-logos-paypal' : false" />
       <span class="text-white text-sm font-semibold">{{ props.type }}</span>
     </div>
 

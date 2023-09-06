@@ -25,7 +25,6 @@
         >
           <div class="flex basis-3/5 gap-x-4 items-center text-sm">
             <span class="flex-1">#{{ item.id.substring(0, 6) }}</span>
-            <span class="flex-1">Stok: {{ item.stock }}</span>
             <span class="flex-1 font-medium capitalize">{{ item.name }}</span>
           </div>
 
@@ -44,13 +43,6 @@
             <div
               class="w-32 inline-flex justify-center items-center gap-x-2 py-1.5 rounded-md"
             >
-              <UIcon
-                :name="
-                  item.kategori.nama_kategori === 'Paypal'
-                    ? 'i-logos-paypal'
-                    : false
-                "
-              />
               <span class="text-sm font-semibold">{{
                 item.kategori.nama_kategori
               }}</span>

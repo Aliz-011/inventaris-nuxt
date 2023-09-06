@@ -49,9 +49,12 @@
           <div
             class="w-full flex flex-col items-center justify-center gap-y-2 mt-2"
           >
-            <NuxtLink to="/" class="underline text-sm font-light">
+            <span
+              @click="isOpen = !isOpen"
+              class="underline text-sm font-light cursor-pointer"
+            >
               Forgot your password?
-            </NuxtLink>
+            </span>
             <NuxtLink to="/register" class="underline text-sm font-light">
               Don't have an account? Sign up.
             </NuxtLink>
@@ -59,6 +62,40 @@
         </div>
       </form>
     </UCard>
+
+    <!-- forgot password modal -->
+    <UModal v-model="isOpen">
+      <UCard>
+        <template #header>
+          <h3 class="font-semibold">Forgot Your Password?</h3>
+          <p class="font-light text-gray-500 text-sm">
+            Enter the email address you used when registering.
+          </p>
+        </template>
+        <form action="#" method="POST" @submit.prevent="forgotPassword">
+          <div class="flex flex-col gap-y-3">
+            <UFormGroup
+              name="email"
+              label="Email Address"
+              class="space-y-2 w-full"
+            >
+              <UInput
+                placeholder="youremail@gmail.com"
+                class="py-2 rounded-md"
+                v-model="email"
+                icon="i-heroicons-envelope"
+            /></UFormGroup>
+            <UButton
+              block
+              type="submit"
+              label="Confirm"
+              class="mt-2"
+              :loading="loading"
+            />
+          </div>
+        </form>
+      </UCard>
+    </UModal>
   </section>
 </template>
 
@@ -72,15 +109,20 @@ useHead({
 
 const router = useRouter();
 const supabase = useSupabaseClient();
+const toast = useToast();
 
 const loading = ref(false);
 const email = ref('');
 const password = ref('');
 const isError = ref(false);
+const isOpen = ref(false);
 
 const handleLogin = async () => {
   try {
     loading.value = true;
+
+    if (!email.value || !password.value)
+      throw Error('Input form must be filled!');
 
     const { error } = await supabase.auth.signInWithPassword({
       email: email.value,
@@ -91,7 +133,33 @@ const handleLogin = async () => {
 
     router.push('/');
   } catch (error) {
-    console.log(error);
+    toast.add({
+      id: 'gagal',
+      title: error.message,
+      icon: 'i-clarity-times-circle-line',
+      color: 'red',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const forgotPassword = async () => {
+  try {
+    loading.value = true;
+    const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
+      redirectTo: 'http://localhost:3000/update-password',
+    });
+    if (error) throw error;
+
+    router.push({ name: 'UpdatePassword' });
+  } catch (error) {
+    toast.add({
+      id: 'gagal',
+      title: error.message,
+      icon: 'i-clarity-times-circle-line',
+      color: 'red',
+    });
   } finally {
     loading.value = false;
   }
