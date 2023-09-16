@@ -1,13 +1,5 @@
 <template>
   <UButton
-    icon="i-heroicons-trash"
-    label="Delete Menu"
-    color="gray"
-    class="border flex-1"
-    :ui="{ rounded: 'rounded-full' }"
-    variant="ghost"
-  />
-  <UButton
     class="px-3 flex-1 inline-flex justify-center"
     :ui="{ rounded: 'rounded-full' }"
     @click="isOpen = !isOpen"
@@ -143,7 +135,7 @@ if (props.data) {
 const handleSubmit = async () => {
   try {
     loading.value = true;
-    const { error, statusText } = await supabase
+    const { error } = await supabase
       .from('menu')
       .update({
         name: namaMenu.value,

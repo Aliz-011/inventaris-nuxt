@@ -39,6 +39,15 @@
               <div v-if="user.email === 'auliamedina25@gmail.com'">
                 <div class="flex p-4 pb-2 border-t border-gray-200"></div>
                 <div class="flex gap-x-2 justify-between text-sm font-medium">
+                  <UButton
+                    icon="i-heroicons-trash"
+                    label="Delete Menu"
+                    color="gray"
+                    class="border flex-1"
+                    :ui="{ rounded: 'rounded-full' }"
+                    variant="ghost"
+                    @click="deleteMenu(id)"
+                  />
                   <UpdateMenuModal :data="data" />
                 </div>
               </div>
@@ -64,11 +73,35 @@ useHead({
   title: 'Edit Menu Page',
 });
 const user = useSupabaseUser();
+const supabase = useSupabaseClient();
+const toast = useToast();
 const { id } = useRoute().params;
+
 const options = {
   style: 'decimal',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 };
-const { data, error } = await useFetch(`/api/menu/${id}`);
+const { data } = await useFetch(`/api/menu/${id}`);
+
+const deleteMenu = async (id) => {
+  try {
+    const { error } = await supabase.from('menu').delete().eq('id', id);
+    if (error) {
+      throw new Error('Gagal menghapus menu');
+    }
+    if (!error) {
+      return navigateTo('/menu');
+    }
+  } catch (error) {
+    toast.add({
+      id: 'gagal',
+      title: 'Menu gagal dihapus',
+      description: error.message,
+      icon: 'i-heroicons-check-circle',
+      timeout: 5000,
+      color: 'red',
+    });
+  }
+};
 </script>
